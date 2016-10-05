@@ -1,0 +1,37 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+int mystrlen(char *c) {
+  int s = 0;
+  while (c[s]) {
+    s += 1;
+  }
+  return s;
+}
+
+char * mystrncpy(char *dest, char *src, int n) {
+  int c = 0;
+  printf("mystrcpy began\n");
+  while(c < n) {
+    if (c >= mystrlen(src)) {
+      dest[c] = 0;
+    } else {
+      dest[c] = src[c];
+    }
+    c++;
+  }
+  return dest;
+}
+
+char * mystrcpy(char *dest, char *src) {
+  return mystrncpy(dest, src, mystrlen(src)+1);
+}
+
+int main() {
+  printf("len of 'systems': %d\n", mystrlen("systems"));
+  char a[] = "systems";
+  char b[] = "softdev";
+  mystrcpy(a, b);
+  printf("dest string: %s\n", a);
+  return 0; 
+}
