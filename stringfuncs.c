@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#define MIN(a,b) (((a)<(b))?(a):(b))
 
 int mystrlen(char *c) {
   int s = 0;
@@ -17,8 +18,10 @@ char * mystrncpy(char *dest, char *src, int n) {
     } else {
       dest[c] = src[c];
     }
+    //printf("%c\n", dest[c]);
     c++;
   }
+  // printf("%s", dest);
   return dest;
 }
 
@@ -28,32 +31,73 @@ char * mystrcpy(char *dest, char *src) {
 
 char * mystrncat(char *dest, char *src, int n) {
   int c = 0;
+  int destlen = mystrlen(dest);
   while(c < n) {
-    printf("mystrncat 3 of source onto dest: %s\n", dest);
+    //printf("%s\n", dest);
     if (c >= mystrlen(src)) {
-      dest[c + mystrlen(dest)] = 0;
+      dest[c + destlen] = 0;
     } else {
-      dest[c + mystrlen(dest)] = src[c];
+      dest[c + destlen] = src[c];
     }
     c++;
   }
   return dest;
 }
 
+char * mystrcat(char *dest, char *src) {
+  return mystrncat(dest, src, mystrlen(src));
+}
+
+int mystrcmp(char *s1, char *s2) {
+  int min = MIN(mystrlen(s1), mystrlen(s2));
+  int i = 0;
+  while(i < min) {
+    if (s1[i] != s2[i]) {
+      return s1[i] - s2[i];
+    }
+    i++;
+  }
+  return 0;
+}
+
+char * mystrchr(char *s, int c) {
+  int i = 0;
+  while(i < mystrlen(s)) {
+    if (s[i] == c) {
+      return &s[i];
+    }
+    i++;
+  }
+  return NULL;
+}
 
 int main() {
-  printf("strlen of 'systems': %d\n", mystrlen("systems"));
+  printf("\nSTRLEN\nstrlen of 'systems': %d\n", mystrlen("systems"));
   char a[] = "source";
   char b[] = "dest";
   char c[] = "dest";
-  mystrncpy(b, a, 3);
-  mystrcpy(c, a);
-  printf("strncpy 4 of source into dest: %s\n", b);
-  printf("strcpy source into dest: %s\n", c);
+  printf("\n//STRNCPY AND STRCPY\na: %s\nb: %s\nc: %s\n", a, b, c);
+  printf("b after strncpy 4 of a: %s\n", mystrncpy(b, a, 4));
+  printf("c after strcpy of a: %s\n", mystrcpy(c, a));
 
   char d[] = "source";
   char e[20] = "dest";
-  mystrncat(e, d, 3);
-  printf("mystrncat 3 of source onto dest: %s\n", e);
+  char f[20] = "dest";
+  printf("\nSTRNCAT AND STRCAT\nd: %s\ne: %s\nf: %s\n", d, e, f);
+  printf("e after strncat 5 of d: %s\n", mystrncat(e, d, 5));
+  printf("f after strcat of d: %s\n", mystrcat(f, d));
+
+  char g[] = "abcde";
+  char h[] = "abcde";
+  char i[] = "abcdz";
+  printf("\nSTRCMP\ng: %s\nh: %s\ni: %s\n", g, h, i);
+  printf("g strcmp h: %d\n", mystrcmp(g, h));
+  printf("h strcmp i: %d\n", mystrcmp(h, i));
+  printf("i strcmp h: %d\n", mystrcmp(i, h));
+
+  char j[] = "abcde";
+  printf("\nSTRCHR\nj: %s\n", j);
+  printf("strchr 'd' in j: %p or %c\n", mystrchr(j, 'd'), *mystrchr(j, 'd'));
+  
   return 0; 
 }
